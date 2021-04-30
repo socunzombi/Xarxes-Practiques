@@ -3,6 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="1bac379a-2737-4cfe-90f9-6ecd9513f005" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica-1/ChattingClient$Input.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica-1/ChattingClient$Input.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica-1/ChattingClient$Output.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica-1/ChattingClient$Output.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica-1/ChattingClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica-1/ChattingClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica-1/ChattingServer$Input.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica-1/ChattingServer$Input.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica-1/ChattingServer$Output.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica-1/ChattingServer$Output.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ChattingClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChattingClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ChattingServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChattingServer.java" afterDir="false" />
     </list>
@@ -38,6 +43,7 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -54,6 +60,19 @@
     <configuration name="ChattingServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ChattingServer" />
       <module name="Practica-1" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -81,6 +100,7 @@
       <workItem from="1619738743349" duration="647000" />
       <workItem from="1619739399311" duration="146000" />
       <workItem from="1619783797291" duration="9135000" />
+      <workItem from="1619799002452" duration="6775000" />
     </task>
     <servers />
   </component>

@@ -1,7 +1,6 @@
 
-// @author Joan Francesc Pedro Garcia
+// Aquesta practica ha estat realitzada per l'alumne Joan Francesc Pedro Garcia
 // Practica 1 de Xarxes
-
 
 import java.net.*;
 import java.io.*;
@@ -9,83 +8,83 @@ import java.util.concurrent.atomic.*;
 
 public class ChattingServer {
 
-    private static int port = 1234;
-    private static boolean connection = false;
-    private static final AtomicBoolean endConnection = new AtomicBoolean();
+    ////  Variables inicialitzades:
+    ////  connection: Variable per comprobar si ja hi ha alguna connexió.
+    ////  finished: comprova si la connexió actual es tanca.
 
+    private static boolean connection = false;
+    private static final AtomicBoolean finished = new AtomicBoolean();
+
+    private static Socket socket;
+    private static DataInputStream dataInputStream;
+    private static DataOutputStream dataOutputStream;
+
+
+    ////  A la funció main iniciem el servidor, amb un serversocket i dos threads, iniciem la variable finished a false
     public static void main (String[] args) {
         try {
 
-            ServerSocket serverSocket = new ServerSocket (port);
+            ServerSocket serverSocket = new ServerSocket (1234);
 
             if (!connection) {
                 connection = true;
-                endConnection.set(false);
 
-                Socket socket = serverSocket.accept();
+                socket = serverSocket.accept();
 
-                Thread threadInput  = new Thread (new Input  (socket), "Client");
-                Thread threadOutput = new Thread (new Output (socket));
+                Thread threadInput  = new Thread (new Input  (), "Client");
+                Thread threadOutput = new Thread (new Output ());
 
                 threadInput.start();
                 threadOutput.start();
 
-                do {
+                finished.set(false);
 
-                } while (!endConnection.get());
-
-                socket.close();
+            } else {
+                serverSocket.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
+    ////  A la classe input fem tots els processos amb el dataInputStream, que sin els de rebre els missatges del  Servidor.
+    ////  En cas de rebre un FI inicia la funció finishProgram()
     private static class Input implements Runnable {
 
-        private final Socket socket;
-        DataInputStream  dataInputStream;
-
-        public Input (Socket socket) {
-            this.socket = socket;
+        public Input () {
         }
 
         @Override
         public void run() {
             try {
-
                 String name = Thread.currentThread().getName();
-
                 dataInputStream = new DataInputStream  (socket.getInputStream());
+                String string = "";
 
-                String string = "Connexió acceptada.";
-
-                do {
+                while (!finished.get()) {
                     string = dataInputStream.readUTF();
                     System.out.println(name + ": <<" + string + ">>");
 
-                    System.out.print(":::");
-                    System.out.print(string);
-                    System.out.print(":::");
-                } while (!string.equals("FI") && !endConnection.get());
-
-                endConnection.set(true);
-                dataInputStream.close();
-                socket.close();
+                    if (string.equals("FI")) {
+                        finishProgram();
+                        break;
+                    }
+                }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Connexió finalitzada");
+                finishProgram();
             }
         }
     }
 
+
+    ////  A la classe output fem tots els processos amb el dataOutputStream, abans d'enviar el que l'usuari ha escrit per teclat, comprovem que no sigui un string buida,
+    ////  en cas d'enviar un FI inicia la funció finishProgram()
     private static class Output implements Runnable {
 
-        private final Socket socket;
-        DataOutputStream dataOutputStream;
-
-        public Output (Socket socket) {
-            this.socket = socket;
+        public Output () {
         }
 
         @Override
@@ -93,7 +92,6 @@ public class ChattingServer {
             try {
 
                 dataOutputStream = new DataOutputStream (socket.getOutputStream());
-
                 BufferedReader bufferedReader = new BufferedReader (new InputStreamReader (System.in));
 
                 String string = "Connexió acceptada.";
@@ -102,23 +100,43 @@ public class ChattingServer {
                 dataOutputStream.writeUTF(string);
                 dataOutputStream.flush();
 
-                do {
-
-                    if (!socket.isClosed()){
+                while (!finished.get()) {
+                    if (bufferedReader.ready()) {
                         string = bufferedReader.readLine();
-                        dataOutputStream.writeUTF(string);
-                        dataOutputStream.flush();
+
+                        if (!string.equals("")) {
+                            dataOutputStream.writeUTF(string);
+                            dataOutputStream.flush();
+                        }
                     }
 
-                } while (!string.equals("FI") && !endConnection.get());
-
-                endConnection.set(true);
-                dataOutputStream.close();
-                socket.close();
+                    if (string.equals("FI")) {
+                        finishProgram();
+                        break;
+                    }
+                }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Connexió finalitzada");
+                finishProgram();
             }
+        }
+    }
+
+    ////  La funcio finishProgram tanca els data i el socket, seteja el finished a true i fa un exit
+    private static void finishProgram () {
+        try {
+
+            dataOutputStream.close();
+            dataInputStream.close();
+            socket.close();
+
+            finished.set(true);
+
+            System.exit (0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
