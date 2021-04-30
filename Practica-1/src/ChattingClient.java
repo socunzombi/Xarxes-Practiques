@@ -4,32 +4,30 @@
 
 import java.net.*;
 import java.io.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChattingClient {
 
-    private static String address = "localhost";
-    private static int port = 1234;
+    private static final String address = "localhost";
+    private static final int port = 1234;
     private static Socket socket;
-    private static final AtomicBoolean endConnection = new AtomicBoolean();
+
+    private static boolean endConnection;
+    private static boolean inputClosed;
+    private static boolean outputClosed;
 
     public static void main(String[] args) {
 
         try {
-
-            endConnection.set(false);
             socket = new Socket (address, port);
 
             Thread threadInput  = new Thread (new Input(), "Server");
             Thread threadOutput = new Thread (new Output());
-
+            endConnection = false;
             threadInput.start();
             threadOutput.start();
 
-            do{}while (!endConnection.get());
-
+            do {} while (!endConnection || !inputClosed || !outputClosed);
             socket.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,7 +38,7 @@ public class ChattingClient {
         DataInputStream dataInputStream;
 
         public Input () {
-            endConnection.set(false);
+            inputClosed = false;
         }
 
         @Override
@@ -55,13 +53,20 @@ public class ChattingClient {
 
                 do {
 
-                    string = dataInputStream.readUTF();
-                    System.out.println(name + ": " + string);
+                    if (!socket.isClosed()){
+                        string = dataInputStream.readUTF();
+                        System.out.println(name + ": " + string);
+                    } else {
+                        break;
+                    }
 
-                } while (!string.equals("FI\n") && !endConnection.get());
+                    if (string.equals("FI")) {
+                        endConnection = true;
+                    }
+                } while (!endConnection);
 
-                endConnection.set(true);
                 dataInputStream.close();
+                inputClosed = true;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -74,30 +79,28 @@ public class ChattingClient {
         DataOutputStream dataOutputStream;
 
         public Output () {
-            endConnection.set(false);
+            outputClosed = false;
         }
 
         @Override
         public void run() {
             try {
-
                 dataOutputStream = new DataOutputStream (socket.getOutputStream());
-
                 BufferedReader bufferedReader = new BufferedReader (new InputStreamReader (System.in));
-
                 String string = "";
 
                 do {
-
                     string = bufferedReader.readLine();
                     dataOutputStream.writeUTF(string);
                     dataOutputStream.flush();
 
-                } while (!string.equals("FI") && !endConnection.get());
+                    if (string.equals("FI")) {
+                        endConnection = true;
+                    }
+                } while (!endConnection);
 
-                endConnection.set(true);
                 dataOutputStream.close();
-
+                outputClosed = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }

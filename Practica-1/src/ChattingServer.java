@@ -58,14 +58,16 @@ public class ChattingServer {
 
                 dataInputStream = new DataInputStream  (socket.getInputStream());
 
-                String string;
+                String string = "Connexió acceptada.";
 
                 do {
-
                     string = dataInputStream.readUTF();
-                    System.out.println(name + ": " + string);
+                    System.out.println(name + ": <<" + string + ">>");
 
-                } while (!string.equals("FI\n") && !endConnection.get());
+                    System.out.print(":::");
+                    System.out.print(string);
+                    System.out.print(":::");
+                } while (!string.equals("FI") && !endConnection.get());
 
                 endConnection.set(true);
                 dataInputStream.close();
@@ -102,9 +104,11 @@ public class ChattingServer {
 
                 do {
 
-                    string = bufferedReader.readLine();
-                    dataOutputStream.writeUTF(string);
-                    dataOutputStream.flush();
+                    if (!socket.isClosed()){
+                        string = bufferedReader.readLine();
+                        dataOutputStream.writeUTF(string);
+                        dataOutputStream.flush();
+                    }
 
                 } while (!string.equals("FI") && !endConnection.get());
 
