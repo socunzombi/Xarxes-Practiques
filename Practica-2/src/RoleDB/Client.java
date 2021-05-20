@@ -16,4 +16,13 @@ public class Client {
             System.exit(0);
         }
     }
+
+    private static void printMenu() {
+        System.out.println ("Menú d'opcions:");
+        System.out.println ("1 - Llista tots els noms de personatge.");
+        System.out.println ("2 - Obté la informació d'un personatge.");
+        System.out.println ("3 - Afegeix un personatge.");
+        System.out.println ("4 - Elimina un personatge.");
+        System.out.println ("5 - Sortir.");
+    }
 }
