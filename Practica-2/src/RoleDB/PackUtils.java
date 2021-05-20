@@ -1,3 +1,5 @@
+package RoleDB;
+
 public class PackUtils {
 
 	public static void packBoolean (boolean b,

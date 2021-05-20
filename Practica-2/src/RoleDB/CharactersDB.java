@@ -1,3 +1,5 @@
+package RoleDB;
+
 import java.io.RandomAccessFile;
 import java.io.IOException;
 

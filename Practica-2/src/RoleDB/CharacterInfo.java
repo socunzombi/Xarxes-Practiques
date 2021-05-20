@@ -1,3 +1,5 @@
+package RoleDB;
+
 public class CharacterInfo {
 
 	private String  name;
