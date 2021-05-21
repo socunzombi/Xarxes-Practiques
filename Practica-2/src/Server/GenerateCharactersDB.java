@@ -1,4 +1,4 @@
-package RoleDB;
+package Server;
 
 import java.io.FileReader;
 import java.io.BufferedReader;

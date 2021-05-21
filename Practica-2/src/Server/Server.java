@@ -1,4 +1,4 @@
-package RoleDB;
+package Server;
 // Aquesta practica ha estat realitzada per l'alumne Joan Francesc Pedro Garcia
 // Practica 2 de Xarxes
 
