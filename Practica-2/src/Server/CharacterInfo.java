@@ -1,5 +1,3 @@
-package Server;
-
 public class CharacterInfo {
 
 	private String  name;

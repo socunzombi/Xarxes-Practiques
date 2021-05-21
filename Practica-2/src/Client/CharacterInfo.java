@@ -1,7 +1,3 @@
-package Client;
-
-import Server.PackUtils;
-
 public class CharacterInfo {
 
 	private String  name;
@@ -14,7 +10,7 @@ public class CharacterInfo {
 	private static final int NAME_LIMIT = 26;
 	public  static final int SIZE = 2 * NAME_LIMIT + 4 + 4 + 4;
 
-	public CharacterInfo(String name, int intelligence, int strength, int constitution) {
+	public CharacterInfo (String name, int intelligence, int strength, int constitution) {
 		this.name           = name;
 		this.intelligence   = intelligence;
 		this.strength       = strength;

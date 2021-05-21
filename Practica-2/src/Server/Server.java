@@ -1,4 +1,3 @@
-package Server;
 // Aquesta practica ha estat realitzada per l'alumne Joan Francesc Pedro Garcia
 // Practica 2 de Xarxes
 
@@ -29,7 +28,7 @@ public class Server {
             charactersDB = new CharactersDB (CHARACTERS_DB_NAME);
             serverSocket = new ServerSocket (port);
         } catch (IOException ex) {
-            System.err.println ("Error opening database!");
+            System.err.println (ANSI_RED + "Error opening database!" + ANSI_RESET);
             System.exit (-1);
         }
 
@@ -50,10 +49,18 @@ public class Server {
             int option = dataInputStream.readInt();
             System.out.println ("L'usuari ha escollit la opció: " + option);
             switch (option) {
-                case 1 -> Option1();
-                case 2 -> Option2();
-                case 3 -> Option3();
-                case 4 -> Option4();
+                case 1:
+                    Option1();
+                    break;
+                case 2:
+                    Option2();
+                    break;
+                case 3:
+                    Option3();
+                    break;
+                case 4:
+                    Option4();
+                    break;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,6 +93,15 @@ public class Server {
 
         try {
             String name = dataInputStream.readUTF();
+
+            int n = charactersDB.searchCharacterByName (name);
+            dataOutputStream.writeBoolean(n != -1);
+            if (n != -1) {
+                CharacterInfo character = charactersDB.readCharacterInfo (n);
+                dataOutputStream.write(character.toBytes());
+            }
+            dataOutputStream.flush();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,11 +110,25 @@ public class Server {
     }
 
     private static void Option3 () {
-        System.out.println ("Option 3");
+        System.out.println ("El servidor ha rebut la petició n. 3, processant...");
+        try {
+            CharacterInfo character = CharacterInfo.fromBytes(dataInputStream.readNBytes(CharacterInfo.SIZE));
+            boolean success = charactersDB.insertNewCharacter (character);
+
+            dataOutputStream.writeBoolean(success);
+            dataOutputStream.flush();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println (ANSI_GREEN + "La Petició ha estat processada correctament." + ANSI_RESET);
     }
 
     private static void Option4 () {
-        System.out.println ("Option 4");
+        System.out.println ("El servidor ha rebut la petició n. 4, processant...");
+
+        System.out.println (ANSI_GREEN + "La Petició ha estat processada correctament." + ANSI_RESET);
     }
 
     private static void openConnection () {

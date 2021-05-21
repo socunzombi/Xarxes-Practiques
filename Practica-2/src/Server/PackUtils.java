@@ -1,5 +1,3 @@
-package Server;
-
 public class PackUtils {
 
 	public static void packBoolean (boolean b,

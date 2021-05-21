@@ -1,5 +1,3 @@
-package Client;
-
 public class PackUtils {
 
 	public static void packBoolean (boolean b,
